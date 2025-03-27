@@ -5,6 +5,23 @@
 #define ERROR 1
 #define ERROR2 -1
 
+#define PI 3.14159265359
+#define MAX_MAP_SIZE 100
+#define WIDTH 980
+#define HEIGHT 620
+#define TILE 32
+#define FOV 66 * (PI / 180)
+#define T 119 // w
+#define B 115 // s
+#define L 97  // a
+#define R 100 // d
+#define LEFT 65361
+#define RIGHT 65363
+#define N (3 * PI / 2)
+#define S PI / 2
+#define E 0
+#define W PI
+
 #define BUFFER_SIZE 5
 
 #include "includes/minilibx-linux/mlx.h"
@@ -19,17 +36,31 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <math.h>
 
 /*****************************************************************/
+
+
+typedef struct s_raycast
+{
+	bool		was_hit_vertical;
+	double		v_hit_posx;
+	double		v_hit_posy;
+	double		v_hit_dist;
+	double		h_hit_posx;
+	double		h_hit_posy;
+	double		h_hit_dist;
+	double		wall_hitx;
+	double		wall_hity;
+	double		wall_hit_dist;
+	double		wall_height;
+	int			color;
+}				t_raycast;
 
 typedef struct s_player
 {
 	double		x;
 	double		y;
-	double		dirX;
-	double		dirY;
-	double		planeX;
-	double		planeY;
 
 	bool		key_up;
 	bool		key_down;
@@ -38,6 +69,11 @@ typedef struct s_player
 
 	bool		left_rotate;
 	bool		right_rotate;
+
+	double		radius;
+	double		rot_angle;
+	int			turn_dir;
+	int			walk_dir;
 }				t_player;
 
 typedef struct s_game_info
@@ -76,6 +112,15 @@ typedef struct s_game
 	t_texture		WE_data;
 	t_texture		EA_data;
 
+	void			*img_ptr;
+	char			*addr;
+	int				width;
+	int				height;
+	int				bpp;
+	int				line_len;
+	int				endian;
+
+	t_raycast		raycast_info;
 	t_player		player;
 	t_game_info		game_info;
 }				t_game;
@@ -94,8 +139,14 @@ int		colors_function(int	(*tab)[3], char *line);
 
 char	*get_next_line(int fd);
 
+void	print_tab(char **tab);
 
 void    ft_free(char **str);
 void	free_struct(t_game *data);
+
+int	start_game(t_game *game);
+int	key_press(int keycode, t_player *player);
+int	key_release(int keycode, t_player *player);
+
 
 #endif

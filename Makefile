@@ -19,7 +19,9 @@ SRCS = $(SRC_DIR)/main.c\
 	$(SRC_DIR)/free_struct.c\
 	$(SRC_DIR)/parsing.c\
 	$(SRC_DIR)/textures_fonctions.c\
-	$(SRC_DIR)/colors_fonctions.c
+	$(SRC_DIR)/colors_fonctions.c\
+	$(SRC_DIR)/TESTING.c
+
 
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
